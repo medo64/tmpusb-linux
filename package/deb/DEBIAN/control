@@ -1,0 +1,14 @@
+Package:        tmpusb
+Version:        MAJOR.MINOR.PATCH
+Architecture:   ARCHITECTURE
+Maintainer:     Josip Medved <jmedved@jmedved.com>
+Homepage:       https://www.medo64.com/tmpusb/
+Description:    Mounting and unmounting TmpUsb drive
+ TmpUsb is presented to a computer as an USB disk drive 11 KB in size (7-8 KB
+ usable). This drive can be then used to store any data (providing that size is
+ not the issue) but primary idea is to use it for the encryption keys. Once all
+ data has been copied to it, user would perform "arming" thus enabling
+ self-erase after approximately 3 seconds of being unplugged.
+Section:        admin
+Priority:       optional
+Depends:        bash (>= 5.0.0), debconf

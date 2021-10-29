@@ -1,0 +1,81 @@
+.\" Manpage for TmpUsb
+.\" Contact jmedved@jmedved.com to correct errors or typos.
+.TH TMPUSB 1 "TODAY" "MAJOR.MINOR.PATCH" "tmpusb man page"
+
+.SH NAME
+
+tmpusb \- TmpUsb disk management
+
+
+.SH SYNOPSIS
+
+.ad l
+\fBtmpusb\fR [ \fB-d \fIdevice\fR ] [ \fB-m\fR ] [ \fB-u\fR ] [ \fB-v\fR ] [ \fB\fIlabel\fR ]
+
+
+.SH DESCRIPTION
+Help with mounting and unmounting TmpUsb drive.
+
+
+
+.SH OPTIONS
+
+.TP
+\fB-d \fIdevice\fR
+Device to use. Needed only if more than one TmpUsb device is plugged in.
+
+.TP
+\fB-m\fR
+Mounts device under \fI/tmpusb/\fR.
+
+.TP
+\fB-u\fR
+Unmounts device.
+
+.TP
+\fB-v\fR
+Shows debug information.
+
+.TP
+\fB\fIlabel\fR
+Sets the label.
+
+
+.SH EXAMPLES
+
+.TP
+\fBtmpusb\fR
+Shows TmpUsb drive status.
+
+.TP
+\fBtmpusb -m\fR
+Mounts the content of the drive under \fI/tmpusb/\fR.
+
+\fBtmpusb mylabel\fR
+Sets the label to \fImylabel\fR.
+
+The following labels have a special meaning:"
+* ARM       - activates TmpUsb on then next loss of power"
+* ARMED     - activates TmpUsb immediately"
+* ARMMAX    - activates TmpUsb immediately and any unplugging of device will cause self-erase
+* CALIBRATE - next unplug will measure how long device will have to be unplugged for self-erase
+* FORGETFUL - drive resets itself upon each plug
+* RESET     - self erasure and settings reset
+* READONLY  - makes drive read-only; valid only after ARMED is already applied
+
+You can find additional commands and instructions at https://medo64.com/tmpusb/"
+
+
+.TP
+\fBtmpusb armed\fR
+Arms the drive so that next unplugged state will delete its content.
+
+.TP
+\fBtmpusb -d da0s1 Armed\fR
+Arms the specific drive (if there are more than one drive available) so that
+next unplugged state will delete its content.
+
+
+.SH AUTHOR
+
+Josip Medved <jmedved@jmedved.com>

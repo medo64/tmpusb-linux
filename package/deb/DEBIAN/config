@@ -24,7 +24,7 @@ if ! [ -f "$SOURCE_FILE" ] && [ "$DEBIAN_FRONTEND" != "noninteractive" ]; then
 fi
 
 if [ "$DO_ADD_REPO" -ne 0 ]; then
-    echo "deb https://medo64.com/repositories/deb stable main" > "$SOURCE_FILE"
+    echo "deb http://packages.medo64.com/deb stable main" > "$SOURCE_FILE"
     if [ -d "/etc/apt/trusted.gpg.d/" ]; then
         echo "-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1

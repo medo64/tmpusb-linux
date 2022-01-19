@@ -1,3 +1,8 @@
+### 0.0.4 [2022-01-18] ###
+
+* Using the first TmpUsb device if multiple devices are found
+
+
 ### 0.0.3 [2021-11-03] ###
 
 * Using http repository for packages

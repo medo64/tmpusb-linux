@@ -41,7 +41,7 @@ while getopts ":d:muv" OPT; do
             echo    "    Unmount device."
             echo
             echo -e "    ${ANSI_UNDERLINE}-v${ANSI_RESET}"
-            echo    "    Show vebose information."
+            echo    "    Show verbose information."
             echo
             echo -e "    ${ANSI_UNDERLINE}label${ANSI_RESET}"
             echo    "    Label to set."

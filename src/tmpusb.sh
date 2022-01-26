@@ -7,6 +7,7 @@ if [ -t 1 ]; then
     ANSI_RED="`[ $(tput colors) -ge 16 ] && tput setaf 9 || tput setaf 1 bold`"
     ANSI_YELLOW="`[ $(tput colors) -ge 16 ] && tput setaf 11 || tput setaf 3 bold`"
     ANSI_BLUE="`[ $(tput colors) -ge 16 ] && tput setaf 12 || tput setaf 4 bold`"
+    ANSI_CYAN="`[ $(tput colors) -ge 16 ] && tput setaf 14 || tput setaf 6 bold`"
     ANSI_WHITE="`[ $(tput colors) -ge 16 ] && tput setaf 15 || tput setaf 7 bold`"
 fi
 
@@ -90,27 +91,27 @@ else
 fi
 
 TMPUSB_DEVICE_COUNT=0
-if [[ $VERBOSE -ge 1 ]]; then echo -e "${ANSI_BLUE}Found devices:"; fi
+if [[ $VERBOSE -ge 2 ]]; then echo -e "${ANSI_BLUE}Found devices:"; fi
 for DEVICE in $DEVICES; do
     if [ -e /dev/$DEVICE ]; then
         HEX_SERIAL=`dd if=/dev/$DEVICE bs=1 skip=551 count=4 2>/dev/null | hexdump -n 4 -e '4/1 "%02X"'`
         if [[ "$HEX_SERIAL" == "4D65646F" ]]; then
             HEX_FAT_TYPE=`dd if=/dev/$DEVICE bs=1 skip=566 count=8 2>/dev/null | hexdump -n 8 -e '8/1 "%02X"'`
             if [[ "$HEX_FAT_TYPE" == "4641543132202020" ]]; then
-                if [[ $VERBOSE -ge 1 ]]; then echo  "  $DEVICE (TmpUsb)"; fi
+                if [[ $VERBOSE -ge 2 ]]; then echo  "  $DEVICE (TmpUsb)"; fi
                 TMPUSB_DEVICE_COUNT=$((TMPUSB_DEVICE_COUNT+1))
                 TMPUSB_DEVICES="$TMPUSB_DEVICES $DEVICE"
             else
-                if [[ $VERBOSE -ge 2 ]]; then echo  "  $DEVICE (unrecognized file system: $HEX_FAT_TYPE)"; fi
+                if [[ $VERBOSE -ge 3 ]]; then echo  "  $DEVICE (unrecognized file system: $HEX_FAT_TYPE)"; fi
             fi
         else
-            if [[ $VERBOSE -ge 2 ]]; then echo "  $DEVICE (unrecognized serial number: $HEX_SERIAL)"; fi
+            if [[ $VERBOSE -ge 3 ]]; then echo "  $DEVICE (unrecognized serial number: $HEX_SERIAL)"; fi
         fi
     else
-        if [[ $VERBOSE -ge 2 ]]; then echo "  $DEVICE (not connected)"; fi
+        if [[ $VERBOSE -ge 3 ]]; then echo "  $DEVICE (not connected)"; fi
     fi
 done
-if [[ $VERBOSE -ge 1 ]]; then echo -ne "${ANSI_RESET}"; fi
+if [[ $VERBOSE -ge 2 ]]; then echo -ne "${ANSI_RESET}"; fi
 
 TMPUSB_DEVICES=`echo $TMPUSB_DEVICES | xargs`
 if [[ $TMPUSB_DEVICE_COUNT -eq 0 ]]; then
@@ -126,7 +127,7 @@ if [[ "$TMPUSB_DEVICE" == "" ]]; then
         TMPUSB_DEVICE="$TMPUSB_DEVICES"
     else
         TMPUSB_DEVICE=`echo $TMPUSB_DEVICES | awk '{print $1}'`
-        echo -e "${ANSI_YELLOW}Multiple TmpUsb devices found: $TMPUSB_DEVICES; using $TMPUSB_DEVICE!${ANSI_RESET}" >&2
+        echo -e "${ANSI_YELLOW}Multiple TmpUsb devices found: $TMPUSB_DEVICES; using ${ANSI_CYAN}$TMPUSB_DEVICE${ANSI_YELLOW}!${ANSI_RESET}" >&2
     fi
 fi
 
@@ -176,7 +177,7 @@ if [[ "$NEW_LABEL" != "" ]]; then
 
     TEMP_SECTOR_FILE=`mktemp /tmp/$SCRIPT_NAME.XXXXXXXX`
     dd if=/dev/$TMPUSB_DEVICE bs=512 skip=3 count=1 of=$TEMP_SECTOR_FILE 2> /dev/null
-    if [[ $VERBOSE -ge 3 ]]; then
+    if [[ $VERBOSE -ge 5 ]]; then
         echo -e "${ANSI_BLUE}  Sector content before:"
         cat $TEMP_SECTOR_FILE | hexdump -Cv | head -n 4 | sed -e 's/^/  /'
         echo -ne "${ANSI_RESET}"
@@ -184,7 +185,7 @@ if [[ "$NEW_LABEL" != "" ]]; then
 
     echo -n "           " | dd of=$TEMP_SECTOR_FILE count=11 conv=notrunc 2> /dev/null
     echo -n "$NEW_LABEL" | dd of=$TEMP_SECTOR_FILE count=${#NEW_LABEL} conv=notrunc 2> /dev/null
-    if [[ $VERBOSE -ge 3 ]]; then
+    if [[ $VERBOSE -ge 5 ]]; then
         echo -e "${ANSI_BLUE}  Sector content after:"
         cat $TEMP_SECTOR_FILE | hexdump -Cv | head -n 4 | sed -e 's/^/  /'
         echo -ne "${ANSI_RESET}"
@@ -233,7 +234,7 @@ for DEVICE in $TMPUSB_DEVICES; do
         fi
         echo
 
-        if [[ $VERBOSE -ge 3 ]]; then
+        if [[ $VERBOSE -ge 5 ]]; then
             echo -e "${ANSI_BLUE}  Sector content:"
             dd if=/dev/$DEVICE bs=512 skip=3 count=1 2> /dev/null | hexdump -Cv | head -n 4 | sed -e 's/^/  /'
             echo -ne "${ANSI_RESET}"

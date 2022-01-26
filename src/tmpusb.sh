@@ -134,13 +134,14 @@ fi
 # Find if partition is present
 
 if [[ -e "/dev/${TMPUSB_DEVICE}s1" ]]; then  # BSD
-    TMPUSB_DEVICE_PARTITION="/dev/${TMPUSB_DEVICE}s1"
+    TMPUSB_DEVICE_SUFFIX="s1"
 elif [[ -e "/dev/${TMPUSB_DEVICE}1" ]]; then  # Linux
-    TMPUSB_DEVICE_PARTITION="/dev/${TMPUSB_DEVICE}1"
+    TMPUSB_DEVICE_SUFFIX="1"
 else
     echo -e "${ANSI_RED}No TmpUsb partition found!${ANSI_RESET}" >&2
     exit 1
 fi
+TMPUSB_DEVICE_PARTITION="/dev/${TMPUSB_DEVICE}${TMPUSB_DEVICE_SUFFIX}"
 
 
 # Unmount
@@ -217,17 +218,25 @@ fi
 
 # Report
 
-LABEL=`dd if=/dev/$TMPUSB_DEVICE bs=512 skip=3 count=1 2> /dev/null | hexdump -n11 -e '11/1 "%c"' | tr -d '[[:space:]]'`
-MOUNTED_AT=`mount | grep "^${TMPUSB_DEVICE_PARTITION}" | cut -d' ' -f3`
+for DEVICE in $TMPUSB_DEVICES; do
+    if [[ "$DEVICE" == "$TMPUSB_DEVICE" ]] || [[ $VERBOSE -ge 1 ]]; then
+        LABEL=`dd if=/dev/$DEVICE bs=512 skip=3 count=1 2> /dev/null | hexdump -n11 -e '11/1 "%c"' | tr -d '[[:space:]]'`
+        MOUNTED_AT=`mount | grep "^/dev/${DEVICE}${TMPUSB_DEVICE_SUFFIX}" | cut -d' ' -f3`
 
-echo -n "/dev/$TMPUSB_DEVICE ${ANSI_WHITE}$LABEL${ANSI_RESET}"
-if [[ "$MOUNTED_AT" != "" ]]; then
-    echo -n " ($MOUNTED_AT)"
-fi
-echo
+        if [[ "$DEVICE" == "$TMPUSB_DEVICE" ]]; then
+            echo -n "$DEVICE ${ANSI_WHITE}$LABEL${ANSI_RESET}"
+        else
+            echo -n "$DEVICE $LABEL"
+        fi
+        if [[ "$MOUNTED_AT" != "" ]]; then
+            echo -n " ($MOUNTED_AT)"
+        fi
+        echo
 
-if [[ $VERBOSE -ge 3 ]]; then
-    echo -e "${ANSI_BLUE}  Sector content:"
-    dd if=/dev/$TMPUSB_DEVICE bs=512 skip=3 count=1 2> /dev/null | hexdump -Cv | head -n 4 | sed -e 's/^/  /'
-    echo -ne "${ANSI_RESET}"
-fi
+        if [[ $VERBOSE -ge 3 ]]; then
+            echo -e "${ANSI_BLUE}  Sector content:"
+            dd if=/dev/$DEVICE bs=512 skip=3 count=1 2> /dev/null | hexdump -Cv | head -n 4 | sed -e 's/^/  /'
+            echo -ne "${ANSI_RESET}"
+        fi
+    fi
+done

@@ -92,27 +92,27 @@ else
 fi
 
 TMPUSB_DEVICE_COUNT=0
-if [[ $VERBOSE -ge 2 ]]; then echo -e "${ANSI_BLUE}Found devices:"; fi
+if [[ $VERBOSE -ge 3 ]]; then echo -e "${ANSI_BLUE}Found devices:"; fi
 for DEVICE in $DEVICES; do
     if [ -e /dev/$DEVICE ]; then
         HEX_SERIAL=`dd if=/dev/$DEVICE bs=1 skip=551 count=4 2>/dev/null | hexdump -n 4 -e '4/1 "%02X"'`
         if [[ "$HEX_SERIAL" == "4D65646F" ]]; then
             HEX_FAT_TYPE=`dd if=/dev/$DEVICE bs=1 skip=566 count=8 2>/dev/null | hexdump -n 8 -e '8/1 "%02X"'`
             if [[ "$HEX_FAT_TYPE" == "4641543132202020" ]]; then
-                if [[ $VERBOSE -ge 2 ]]; then echo  "  $DEVICE (TmpUsb)"; fi
+                if [[ $VERBOSE -ge 3 ]]; then echo  "  $DEVICE (TmpUsb)"; fi
                 TMPUSB_DEVICE_COUNT=$((TMPUSB_DEVICE_COUNT+1))
                 TMPUSB_DEVICES="$TMPUSB_DEVICES $DEVICE"
             else
-                if [[ $VERBOSE -ge 3 ]]; then echo  "  $DEVICE (unrecognized file system: $HEX_FAT_TYPE)"; fi
+                if [[ $VERBOSE -ge 4 ]]; then echo  "  $DEVICE (unrecognized file system: $HEX_FAT_TYPE)"; fi
             fi
         else
-            if [[ $VERBOSE -ge 3 ]]; then echo "  $DEVICE (unrecognized serial number: $HEX_SERIAL)"; fi
+            if [[ $VERBOSE -ge 4 ]]; then echo "  $DEVICE (unrecognized serial number: $HEX_SERIAL)"; fi
         fi
     else
-        if [[ $VERBOSE -ge 3 ]]; then echo "  $DEVICE (not connected)"; fi
+        if [[ $VERBOSE -ge 4 ]]; then echo "  $DEVICE (not connected)"; fi
     fi
 done
-if [[ $VERBOSE -ge 2 ]]; then echo -ne "${ANSI_RESET}"; fi
+if [[ $VERBOSE -ge 3 ]]; then echo -ne "${ANSI_RESET}"; fi
 
 TMPUSB_DEVICES=`echo $TMPUSB_DEVICES | xargs`
 if [[ $TMPUSB_DEVICE_COUNT -eq 0 ]]; then
@@ -136,23 +136,22 @@ fi
 # Find if partition is present
 
 if [[ -e "/dev/${TMPUSB_DEVICE}s1" ]]; then  # BSD
-    TMPUSB_DEVICE_SUFFIX="s1"
+    TMPUSB_DEVICE_PARTITION="/dev/${TMPUSB_DEVICE}s1"
 elif [[ -e "/dev/${TMPUSB_DEVICE}1" ]]; then  # Linux
-    TMPUSB_DEVICE_SUFFIX="1"
+    TMPUSB_DEVICE_PARTITION="/dev/${TMPUSB_DEVICE}1"
 else
     echo -e "${ANSI_RED}No TmpUsb partition found!${ANSI_RESET}" >&2
     exit 1
 fi
-TMPUSB_DEVICE_PARTITION="/dev/${TMPUSB_DEVICE}${TMPUSB_DEVICE_SUFFIX}"
 
 
 # Unmount
 
 if [[ $UNMOUNT -gt 0 ]]; then
-    if [[ $VERBOSE -ge 1 ]]; then echo -e "${ANSI_BLUE}Unmounting device ${TMPUSB_DEVICE_PARTITION}${ANSI_RESET}"; fi
+    if [[ $VERBOSE -ge 2 ]]; then echo -e "${ANSI_BLUE}Unmounting device ${TMPUSB_DEVICE_PARTITION}${ANSI_RESET}"; fi
     MOUNT_DIRECTORY_CURRENT=`mount | grep "^${TMPUSB_DEVICE_PARTITION}" | cut -d' ' -f3`
     if [[ "$MOUNT_DIRECTORY_CURRENT" != "" ]]; then
-        if [[ $VERBOSE -ge 2 ]]; then echo -e "${ANSI_BLUE}Removing mount directory $MOUNT_DIRECTORY_CURRENT${ANSI_RESET}"; fi
+        if [[ $VERBOSE -ge 3 ]]; then echo -e "${ANSI_BLUE}Removing mount directory $MOUNT_DIRECTORY_CURRENT${ANSI_RESET}"; fi
         UMOUNT_RESULT=`umount ${TMPUSB_DEVICE_PARTITION} 2>&1`
         if [[ $? -ne 0 ]]; then
             echo -e "${ANSI_RED}$UMOUNT_RESULT${ANSI_RESET}"
@@ -174,7 +173,7 @@ if [[ "$NEW_LABEL" != "" ]]; then
         exit 1
     fi
 
-    if [[ $VERBOSE -ge 1 ]]; then echo -e "${ANSI_BLUE}Writing $NEW_LABEL to $TMPUSB_DEVICE${ANSI_RESET}"; fi
+    if [[ $VERBOSE -ge 2 ]]; then echo -e "${ANSI_BLUE}Writing $NEW_LABEL to $TMPUSB_DEVICE${ANSI_RESET}"; fi
 
     TEMP_SECTOR_FILE=`mktemp /tmp/$SCRIPT_NAME.XXXXXXXX`
     dd if=/dev/$TMPUSB_DEVICE bs=512 skip=3 count=1 of=$TEMP_SECTOR_FILE 2> /dev/null
@@ -203,7 +202,7 @@ fi
 # Mount
 
 if [[ $MOUNT -gt 0 ]]; then
-    if [[ $VERBOSE -ge 1 ]]; then echo -e "${ANSI_BLUE}Mounting device ${TMPUSB_DEVICE_PARTITION} into $MOUNT_DIRECTORY${ANSI_RESET}"; fi
+    if [[ $VERBOSE -ge 2 ]]; then echo -e "${ANSI_BLUE}Mounting device ${TMPUSB_DEVICE_PARTITION} into $MOUNT_DIRECTORY${ANSI_RESET}"; fi
     rmdir $MOUNT_DIRECTORY 2> /dev/null
     if [ -d "$MOUNT_DIRECTORY" ]; then
         echo -e "${ANSI_RED}Directory $MOUNT_DIRECTORY already present and not empty!${ANSI_RESET}" >&2

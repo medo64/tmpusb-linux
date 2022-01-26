@@ -222,7 +222,14 @@ fi
 for DEVICE in $TMPUSB_DEVICES; do
     if [[ "$DEVICE" == "$TMPUSB_DEVICE" ]] || [[ $VERBOSE -ge 1 ]]; then
         LABEL=`dd if=/dev/$DEVICE bs=512 skip=3 count=1 2> /dev/null | hexdump -n11 -e '11/1 "%c"' | tr -d '[[:space:]]'`
-        MOUNTED_AT=`mount | grep "^/dev/${DEVICE}${TMPUSB_DEVICE_SUFFIX}" | cut -d' ' -f3`
+
+        if [[ -e "/dev/${DEVICE}s1" ]]; then  # BSD
+            MOUNTED_AT=`mount | grep "^/dev/${DEVICE}s1" | cut -d' ' -f3`
+        elif [[ -e "/dev/${DEVICE}1" ]]; then  # Linux
+            MOUNTED_AT=`mount | grep "^/dev/${DEVICE}1" | cut -d' ' -f3`
+        else
+            MOUNTED_AT=""  # cannot figure it out
+        fi
 
         if [[ "$DEVICE" == "$TMPUSB_DEVICE" ]]; then
             printf "${ANSI_CYAN}%s ${ANSI_WHITE}%-11s${ANSI_RESET}" $DEVICE $LABEL

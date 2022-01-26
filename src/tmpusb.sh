@@ -29,51 +29,51 @@ while getopts ":d:muv" OPT; do
         v)  VERBOSE=$((VERBOSE+1)) ;;
 
         *)  echo
-            echo    "  ${ANSI_WHITE}SYNOPSIS${ANSI_RESET}"
+            echo "  ${ANSI_WHITE}SYNOPSIS${ANSI_RESET}"
             echo
-            echo -e "  $SCRIPT_NAME [${ANSI_UNDERLINE}-d device${ANSI_RESET}] [${ANSI_UNDERLINE}-m${ANSI_RESET}] [${ANSI_UNDERLINE}-u${ANSI_RESET}] [${ANSI_UNDERLINE}label${ANSI_RESET}]"
+            echo "  $SCRIPT_NAME [${ANSI_UNDERLINE}-d device${ANSI_RESET}] [${ANSI_UNDERLINE}-m${ANSI_RESET}] [${ANSI_UNDERLINE}-u${ANSI_RESET}] [${ANSI_UNDERLINE}label${ANSI_RESET}]"
             echo
-            echo -e "    ${ANSI_UNDERLINE}-d device${ANSI_RESET}"
-            echo    "    Device to use." | fmt
+            echo "    ${ANSI_UNDERLINE}-d device${ANSI_RESET}"
+            echo "    Device to use." | fmt
             echo
-            echo -e "    ${ANSI_UNDERLINE}-m${ANSI_RESET}"
-            echo    "    Mount device under /tmpusb/." | fmt
+            echo "    ${ANSI_UNDERLINE}-m${ANSI_RESET}"
+            echo "    Mount device under /tmpusb/." | fmt
             echo
-            echo -e "    ${ANSI_UNDERLINE}-u${ANSI_RESET}"
-            echo    "    Unmount device." | fmt
+            echo "    ${ANSI_UNDERLINE}-u${ANSI_RESET}"
+            echo "    Unmount device." | fmt
             echo
-            echo -e "    ${ANSI_UNDERLINE}-v${ANSI_RESET}"
-            echo    "    Show verbose information." | fmt
+            echo "    ${ANSI_UNDERLINE}-v${ANSI_RESET}"
+            echo "    Show verbose information." | fmt
             echo
-            echo -e "    ${ANSI_UNDERLINE}label${ANSI_RESET}"
-            echo    "    Label to set." | fmt
-            echo
-            echo
-            echo    "  ${ANSI_WHITE}DESCRIPTION${ANSI_RESET}"
-            echo
-            echo    "  Shows and optionally sets the label." | fmt
-            echo
-            echo    "  Unmounting is done before label writing while mounting is done after label writing has taken place." | fmt
-            echo
-            echo    "  Label writing, mounting, and unmounting are done only if a single device is found or specified." | fmt
-            echo
-            echo    "  The following labels have a special meaning:" | fmt
-            echo    "  * ARMED - activates TmpUsb self-erase capability" | fmt
-            echo
-            echo    "  You can find additional commands and instructions at https://medo64.com/tmpusb/" | fmt
+            echo "    ${ANSI_UNDERLINE}label${ANSI_RESET}"
+            echo "    Label to set." | fmt
             echo
             echo
-            echo    "  ${ANSI_WHITE}SAMPLES${ANSI_RESET}"
+            echo "  ${ANSI_WHITE}DESCRIPTION${ANSI_RESET}"
             echo
-            echo    "  $0"
-            echo    "  $0 -m"
-            echo    "  $0 ARMED"
+            echo "  Shows and optionally sets the label." | fmt
+            echo
+            echo "  Unmounting is done before label writing while mounting is done after label writing has taken place." | fmt
+            echo
+            echo "  Label writing, mounting, and unmounting are done only if a single device is found or specified." | fmt
+            echo
+            echo "  The following labels have a special meaning:" | fmt
+            echo "  * ARMED - activates TmpUsb self-erase capability" | fmt
+            echo
+            echo "  You can find additional commands and instructions at https://medo64.com/tmpusb/" | fmt
+            echo
+            echo
+            echo "  ${ANSI_WHITE}SAMPLES${ANSI_RESET}"
+            echo
+            echo "  $0"
+            echo "  $0 -m"
+            echo "  $0 ARMED"
             if command -v geom &> /dev/null; then  # BSD
-                echo    "  $0 -d da0 ARMED"
-                echo    "  $0 -d da0 -m"
+                echo "  $0 -d da0 ARMED"
+                echo "  $0 -d da0 -m"
             else
-                echo    "  $0 -d sda ARMED"
-                echo    "  $0 -d sda -m"
+                echo "  $0 -d sda ARMED"
+                echo "  $0 -d sda -m"
             fi
             echo
             exit 255
@@ -83,13 +83,13 @@ done
 shift $((OPTIND-1))
 
 if [[ "$2" != "" ]]; then
-    echo -e "${ANSI_RED}$SCRIPT_NAME: too many arguments!${ANSI_RESET}" >&2
+    echo "${ANSI_RED}$SCRIPT_NAME: too many arguments!${ANSI_RESET}" >&2
     exit 255
 fi
 
 NEW_LABEL=$1
 if [[ ${#NEW_LABEL} -gt 11 ]]; then
-    echo -e "${ANSI_RED}Label length cannot exceed 11 characters!${ANSI_RESET}" >&2
+    echo "${ANSI_RED}Label length cannot exceed 11 characters!${ANSI_RESET}" >&2
     exit 1
 fi
 
@@ -105,7 +105,7 @@ else
 fi
 
 TMPUSB_DEVICE_COUNT=0
-if [[ $VERBOSE -ge 3 ]]; then echo -e "${ANSI_BLUE}Found devices:"; fi
+if [[ $VERBOSE -ge 3 ]]; then echo "${ANSI_BLUE}Found devices:"; fi
 for DEVICE in $DEVICES; do
     if [ -e /dev/$DEVICE ]; then
         HEX_SERIAL=`dd if=/dev/$DEVICE bs=1 skip=551 count=4 2>/dev/null | hexdump -n 4 -e '4/1 "%02X"'`
@@ -129,7 +129,7 @@ if [[ $VERBOSE -ge 3 ]]; then echo -ne "${ANSI_RESET}"; fi
 
 TMPUSB_DEVICES=`echo $TMPUSB_DEVICES | xargs`
 if [[ $TMPUSB_DEVICE_COUNT -eq 0 ]]; then
-    echo -e "${ANSI_RED}No TmpUsb device found!${ANSI_RESET}" >&2
+    echo "${ANSI_RED}No TmpUsb device found!${ANSI_RESET}" >&2
     exit 1
 fi
 
@@ -141,7 +141,7 @@ if [[ "$TMPUSB_DEVICE" == "" ]]; then
         TMPUSB_DEVICE="$TMPUSB_DEVICES"
     else
         TMPUSB_DEVICE=`echo $TMPUSB_DEVICES | awk '{print $1}'`
-        echo -e "${ANSI_YELLOW}Multiple TmpUsb devices found: $TMPUSB_DEVICES; using ${ANSI_CYAN}$TMPUSB_DEVICE${ANSI_YELLOW}!${ANSI_RESET}" >&2
+        echo "${ANSI_YELLOW}Multiple TmpUsb devices found: $TMPUSB_DEVICES; using ${ANSI_CYAN}$TMPUSB_DEVICE${ANSI_YELLOW}!${ANSI_RESET}" >&2
     fi
 fi
 
@@ -153,7 +153,7 @@ if [[ -e "/dev/${TMPUSB_DEVICE}s1" ]]; then  # BSD
 elif [[ -e "/dev/${TMPUSB_DEVICE}1" ]]; then  # Linux
     TMPUSB_DEVICE_PARTITION="/dev/${TMPUSB_DEVICE}1"
 else
-    echo -e "${ANSI_RED}No TmpUsb partition found!${ANSI_RESET}" >&2
+    echo "${ANSI_RED}No TmpUsb partition found!${ANSI_RESET}" >&2
     exit 1
 fi
 
@@ -161,17 +161,17 @@ fi
 # Unmount
 
 if [[ $UNMOUNT -gt 0 ]]; then
-    if [[ $VERBOSE -ge 2 ]]; then echo -e "${ANSI_BLUE}Unmounting device ${TMPUSB_DEVICE_PARTITION}${ANSI_RESET}"; fi
+    if [[ $VERBOSE -ge 2 ]]; then echo "${ANSI_BLUE}Unmounting device ${TMPUSB_DEVICE_PARTITION}${ANSI_RESET}"; fi
     MOUNT_DIRECTORY_CURRENT=`mount | grep "^${TMPUSB_DEVICE_PARTITION}" | cut -d' ' -f3`
     if [[ "$MOUNT_DIRECTORY_CURRENT" != "" ]]; then
-        if [[ $VERBOSE -ge 3 ]]; then echo -e "${ANSI_BLUE}Removing mount directory $MOUNT_DIRECTORY_CURRENT${ANSI_RESET}"; fi
+        if [[ $VERBOSE -ge 3 ]]; then echo "${ANSI_BLUE}Removing mount directory $MOUNT_DIRECTORY_CURRENT${ANSI_RESET}"; fi
         UMOUNT_RESULT=`umount ${TMPUSB_DEVICE_PARTITION} 2>&1`
         if [[ $? -ne 0 ]]; then
-            echo -e "${ANSI_RED}$UMOUNT_RESULT${ANSI_RESET}"
+            echo "${ANSI_RED}$UMOUNT_RESULT${ANSI_RESET}"
         fi
         rmdir "$MOUNT_DIRECTORY_CURRENT" 2> /dev/null
     else
-        echo -e "${ANSI_YELLOW}Mount point for ${TMPUSB_DEVICE_PARTITION} not found.${ANSI_RESET}" >&2
+        echo "${ANSI_YELLOW}Mount point for ${TMPUSB_DEVICE_PARTITION} not found.${ANSI_RESET}" >&2
     fi
 fi
 
@@ -182,31 +182,33 @@ if [[ "$NEW_LABEL" != "" ]]; then
     MOUNT_DIRECTORY_CURRENT=`mount | grep "^${TMPUSB_DEVICE_PARTITION}" | cut -d' ' -f3`
     if [[ "$MOUNT_DIRECTORY_CURRENT" != "" ]]; then
         echo "$MOUNT_DIRECTORY_CURRENT"
-        echo -e "${ANSI_RED}Cannot write label to currently mounted device ${TMPUSB_DEVICE_PARTITION}!${ANSI_RESET}" >&2
+        echo "${ANSI_RED}Cannot write label to currently mounted device ${TMPUSB_DEVICE_PARTITION}!${ANSI_RESET}" >&2
         exit 1
     fi
 
-    if [[ $VERBOSE -ge 2 ]]; then echo -e "${ANSI_BLUE}Writing $NEW_LABEL to $TMPUSB_DEVICE${ANSI_RESET}"; fi
+    if [[ $VERBOSE -ge 2 ]]; then echo "${ANSI_BLUE}Writing $NEW_LABEL to $TMPUSB_DEVICE${ANSI_RESET}"; fi
 
     TEMP_SECTOR_FILE=`mktemp /tmp/$SCRIPT_NAME.XXXXXXXX`
     dd if=/dev/$TMPUSB_DEVICE bs=512 skip=3 count=1 of=$TEMP_SECTOR_FILE 2> /dev/null
     if [[ $VERBOSE -ge 5 ]]; then
-        echo -e "${ANSI_NAVY}  Sector content before:"
+        echo "${ANSI_BLUE}  Sector content before:${ANSI_RESET}"
+        echo -n "${ANSI_NAVY}"
         cat $TEMP_SECTOR_FILE | hexdump -Cv | head -n 4 | sed -e 's/^/  /'
-        echo -ne "${ANSI_RESET}"
+        echo -n "${ANSI_RESET}"
     fi
 
     echo -n "           " | dd of=$TEMP_SECTOR_FILE count=11 conv=notrunc 2> /dev/null
     echo -n "$NEW_LABEL" | dd of=$TEMP_SECTOR_FILE count=${#NEW_LABEL} conv=notrunc 2> /dev/null
     if [[ $VERBOSE -ge 5 ]]; then
-        echo -e "${ANSI_NAVY}  Sector content after:"
+        echo "${ANSI_BLUE}  Sector content after:${ANSI_RESET}"
+        echo -n "${ANSI_NAVY}"
         cat $TEMP_SECTOR_FILE | hexdump -Cv | head -n 4 | sed -e 's/^/  /'
         echo -ne "${ANSI_RESET}"
     fi
 
     dd if=$TEMP_SECTOR_FILE bs=512 seek=3 count=1 of=/dev/$TMPUSB_DEVICE 2> /dev/null
     if [[ $? -gt 0 ]]; then
-        echo -e "${ANSI_RED}Cannot write label to /dev/${TMPUSB_DEVICE}!${ANSI_RESET}" >&2
+        echo "${ANSI_RED}Cannot write label to /dev/${TMPUSB_DEVICE}!${ANSI_RESET}" >&2
         exit 1
     fi
 fi
@@ -215,10 +217,10 @@ fi
 # Mount
 
 if [[ $MOUNT -gt 0 ]]; then
-    if [[ $VERBOSE -ge 2 ]]; then echo -e "${ANSI_BLUE}Mounting device ${TMPUSB_DEVICE_PARTITION} into $MOUNT_DIRECTORY${ANSI_RESET}"; fi
+    if [[ $VERBOSE -ge 2 ]]; then echo "${ANSI_BLUE}Mounting device ${TMPUSB_DEVICE_PARTITION} into $MOUNT_DIRECTORY${ANSI_RESET}"; fi
     rmdir $MOUNT_DIRECTORY 2> /dev/null
     if [ -d "$MOUNT_DIRECTORY" ]; then
-        echo -e "${ANSI_RED}Directory $MOUNT_DIRECTORY already present and not empty!${ANSI_RESET}" >&2
+        echo "${ANSI_RED}Directory $MOUNT_DIRECTORY already present and not empty!${ANSI_RESET}" >&2
         exit 1
     fi
     mkdir $MOUNT_DIRECTORY
@@ -259,9 +261,10 @@ for DEVICE in $TMPUSB_DEVICES; do
         echo
 
         if [[ $VERBOSE -ge 5 ]]; then
-            echo -e "${ANSI_NAVY}  Sector content:"
+            echo "${ANSI_BLUE}  Sector content:${ANSI_RESET}"
+            echo -n "${ANSI_NAVY}"
             dd if=/dev/$DEVICE bs=512 skip=3 count=1 2> /dev/null | hexdump -Cv | head -n 4 | sed -e 's/^/  /'
-            echo -ne "${ANSI_RESET}"
+            echo -n "${ANSI_RESET}"
         fi
     fi
 done

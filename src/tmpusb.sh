@@ -226,12 +226,16 @@ for DEVICE in $TMPUSB_DEVICES; do
         MOUNTED_AT=`mount | grep "^/dev/${DEVICE}${TMPUSB_DEVICE_SUFFIX}" | cut -d' ' -f3`
 
         if [[ "$DEVICE" == "$TMPUSB_DEVICE" ]]; then
-            echo -n "${ANSI_CYAN}$DEVICE ${ANSI_WHITE}$LABEL${ANSI_RESET}"
+            printf "${ANSI_CYAN}%s ${ANSI_WHITE}%-11s${ANSI_RESET}" $DEVICE $LABEL
         else
-            echo -n "$DEVICE $LABEL"
+            printf "%s %-11s" $DEVICE $LABEL
         fi
         if [[ "$MOUNTED_AT" != "" ]]; then
-            echo -n " ${ANSI_TEAL}$MOUNTED_AT${ANSI_RESET}"
+            if [[ "$DEVICE" == "$TMPUSB_DEVICE" ]]; then
+                echo -n " ${ANSI_TEAL}$MOUNTED_AT${ANSI_RESET}"
+            else
+                echo -n " $MOUNTED_AT"
+            fi
         fi
         echo
 

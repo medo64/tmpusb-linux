@@ -9,6 +9,7 @@ if [ -t 1 ]; then
     ANSI_BLUE="`[ $(tput colors) -ge 16 ] && tput setaf 12 || tput setaf 4 bold`"
     ANSI_CYAN="`[ $(tput colors) -ge 16 ] && tput setaf 14 || tput setaf 6 bold`"
     ANSI_WHITE="`[ $(tput colors) -ge 16 ] && tput setaf 15 || tput setaf 7 bold`"
+    ANSI_TEAL="$(tput setaf 6)"
 fi
 
 MOUNT_DIRECTORY="/tmpusb"
@@ -225,12 +226,12 @@ for DEVICE in $TMPUSB_DEVICES; do
         MOUNTED_AT=`mount | grep "^/dev/${DEVICE}${TMPUSB_DEVICE_SUFFIX}" | cut -d' ' -f3`
 
         if [[ "$DEVICE" == "$TMPUSB_DEVICE" ]]; then
-            echo -n "$DEVICE ${ANSI_WHITE}$LABEL${ANSI_RESET}"
+            echo -n "${ANSI_CYAN}$DEVICE ${ANSI_WHITE}$LABEL${ANSI_RESET}"
         else
             echo -n "$DEVICE $LABEL"
         fi
         if [[ "$MOUNTED_AT" != "" ]]; then
-            echo -n " ($MOUNTED_AT)"
+            echo -n " ${ANSI_TEAL}$MOUNTED_AT${ANSI_RESET}"
         fi
         echo
 

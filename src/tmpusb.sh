@@ -35,16 +35,16 @@ while getopts ":d:muv" OPT; do
             echo    "    Device to use."
             echo
             echo -e "    ${ANSI_UNDERLINE}-m${ANSI_RESET}"
-            echo    "    Mounts device under /tmpusb/."
+            echo    "    Mount device under /tmpusb/."
             echo
             echo -e "    ${ANSI_UNDERLINE}-u${ANSI_RESET}"
-            echo    "    Unmounts device."
+            echo    "    Unmount device."
             echo
             echo -e "    ${ANSI_UNDERLINE}-v${ANSI_RESET}"
-            echo    "    Shows debug information."
+            echo    "    Show vebose information."
             echo
             echo -e "    ${ANSI_UNDERLINE}label${ANSI_RESET}"
-            echo    "    Sets the label."
+            echo    "    Label to set."
             echo
             echo    "  DESCRIPTION"
             echo    "  Shows and optionally sets the label."
@@ -52,15 +52,14 @@ while getopts ":d:muv" OPT; do
             echo    "  Label writing, mounting, and unmounting are done only if a single device is found or specified."
             echo
             echo    "  The following labels have a special meaning:"
-            echo    "  * ARM   - activates TmpUsb on next loss of power"
-            echo    "  * ARMED - activates TmpUsb immediately"
+            echo    "  * ARMED - activates TmpUsb self-erase capability"
             echo
             echo    "  You can find additional commands and instructions at https://medo64.com/tmpusb/"
             echo
             echo    "  SAMPLES"
             echo    "  $0"
             echo    "  $0 Armed"
-            echo    "  $0 -d da0s1 Armed"
+            echo    "  $0 -d da0s1 ARMED"
             echo    "  $0 -d da0s1 -m"
             echo
             exit 255

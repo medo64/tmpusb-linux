@@ -26,19 +26,19 @@ Device to use. Needed only if more than one TmpUsb device is plugged in.
 
 .TP
 \fB-m\fR
-Mounts device under \fI/tmpusb/\fR.
+Mount device under \fI/tmpusb/\fR.
 
 .TP
 \fB-u\fR
-Unmounts device.
+Unmount device.
 
 .TP
 \fB-v\fR
-Shows debug information.
+Show vebose information.
 
 .TP
 \fB\fIlabel\fR
-Sets the label.
+Label to set.
 
 
 .SH EXAMPLES
@@ -51,13 +51,13 @@ Shows TmpUsb drive status.
 \fBtmpusb -m\fR
 Mounts the content of the drive under \fI/tmpusb/\fR.
 
-\fBtmpusb mylabel\fR
-Sets the label to \fImylabel\fR.
+\fBtmpusb MYLABEL\fR
+Sets the label to \fIMYLABEL\fR.
 
 The following labels have a special meaning:"
 * ARM       - activates TmpUsb on then next loss of power"
-* ARMED     - activates TmpUsb immediately"
-* ARMMAX    - activates TmpUsb immediately and any unplugging of device will cause self-erase
+* ARMED     - activates TmpUsb self-erase capability immediately"
+* ARMMAX    - activates TmpUsb self-erase capability immediately and any unplugging of device will cause self-erase
 * CALIBRATE - next unplug will measure how long device will have to be unplugged for self-erase
 * FORGETFUL - drive resets itself upon each plug
 * RESET     - self erasure and settings reset

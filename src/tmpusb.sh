@@ -28,35 +28,42 @@ while getopts ":d:muv" OPT; do
         v)  VERBOSE=$((VERBOSE+1)) ;;
 
         *)  echo
-            echo    "  SYNOPSIS"
+            echo    "  ${ANSI_WHITE}SYNOPSIS${ANSI_RESET}"
+            echo
             echo -e "  $SCRIPT_NAME [${ANSI_UNDERLINE}-d device${ANSI_RESET}] [${ANSI_UNDERLINE}-m${ANSI_RESET}] [${ANSI_UNDERLINE}-u${ANSI_RESET}] [${ANSI_UNDERLINE}label${ANSI_RESET}]"
             echo
             echo -e "    ${ANSI_UNDERLINE}-d device${ANSI_RESET}"
-            echo    "    Device to use."
+            echo    "    Device to use." | fmt
             echo
             echo -e "    ${ANSI_UNDERLINE}-m${ANSI_RESET}"
-            echo    "    Mount device under /tmpusb/."
+            echo    "    Mount device under /tmpusb/." | fmt
             echo
             echo -e "    ${ANSI_UNDERLINE}-u${ANSI_RESET}"
-            echo    "    Unmount device."
+            echo    "    Unmount device." | fmt
             echo
             echo -e "    ${ANSI_UNDERLINE}-v${ANSI_RESET}"
-            echo    "    Show verbose information."
+            echo    "    Show verbose information." | fmt
             echo
             echo -e "    ${ANSI_UNDERLINE}label${ANSI_RESET}"
-            echo    "    Label to set."
+            echo    "    Label to set." | fmt
             echo
-            echo    "  DESCRIPTION"
-            echo    "  Shows and optionally sets the label."
-            echo    "  Unmounting is done before label writing while mounting is done after label writing has taken place."
-            echo    "  Label writing, mounting, and unmounting are done only if a single device is found or specified."
             echo
-            echo    "  The following labels have a special meaning:"
-            echo    "  * ARMED - activates TmpUsb self-erase capability"
+            echo    "  ${ANSI_WHITE}DESCRIPTION${ANSI_RESET}"
             echo
-            echo    "  You can find additional commands and instructions at https://medo64.com/tmpusb/"
+            echo    "  Shows and optionally sets the label." | fmt
             echo
-            echo    "  SAMPLES"
+            echo    "  Unmounting is done before label writing while mounting is done after label writing has taken place." | fmt
+            echo
+            echo    "  Label writing, mounting, and unmounting are done only if a single device is found or specified." | fmt
+            echo
+            echo    "  The following labels have a special meaning:" | fmt
+            echo    "  * ARMED - activates TmpUsb self-erase capability" | fmt
+            echo
+            echo    "  You can find additional commands and instructions at https://medo64.com/tmpusb/" | fmt
+            echo
+            echo
+            echo    "  ${ANSI_WHITE}SAMPLES${ANSI_RESET}"
+            echo
             echo    "  $0"
             echo    "  $0 Armed"
             echo    "  $0 -d da0s1 ARMED"

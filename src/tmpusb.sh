@@ -65,9 +65,15 @@ while getopts ":d:muv" OPT; do
             echo    "  ${ANSI_WHITE}SAMPLES${ANSI_RESET}"
             echo
             echo    "  $0"
-            echo    "  $0 Armed"
-            echo    "  $0 -d da0s1 ARMED"
-            echo    "  $0 -d da0s1 -m"
+            echo    "  $0 -m"
+            echo    "  $0 ARMED"
+            if command -v geom &> /dev/null; then  # BSD
+                echo    "  $0 -d da0 ARMED"
+                echo    "  $0 -d da0 -m"
+            else
+                echo    "  $0 -d sda ARMED"
+                echo    "  $0 -d sda -m"
+            fi
             echo
             exit 255
         ;;

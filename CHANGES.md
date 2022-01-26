@@ -1,3 +1,8 @@
+### 0.1.0 [2022-01-24] ###
+
+* Refactoring colors and verbosity
+
+
 ### 0.0.4 [2022-01-18] ###
 
 * Using the first TmpUsb device if multiple devices are found

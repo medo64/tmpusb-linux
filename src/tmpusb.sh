@@ -9,6 +9,7 @@ if [ -t 1 ]; then
     ANSI_BLUE="`[ $(tput colors) -ge 16 ] && tput setaf 12 || tput setaf 4 bold`"
     ANSI_CYAN="`[ $(tput colors) -ge 16 ] && tput setaf 14 || tput setaf 6 bold`"
     ANSI_WHITE="`[ $(tput colors) -ge 16 ] && tput setaf 15 || tput setaf 7 bold`"
+    ANSI_NAVY="$(tput setaf 4)"
     ANSI_TEAL="$(tput setaf 6)"
 fi
 
@@ -190,7 +191,7 @@ if [[ "$NEW_LABEL" != "" ]]; then
     TEMP_SECTOR_FILE=`mktemp /tmp/$SCRIPT_NAME.XXXXXXXX`
     dd if=/dev/$TMPUSB_DEVICE bs=512 skip=3 count=1 of=$TEMP_SECTOR_FILE 2> /dev/null
     if [[ $VERBOSE -ge 5 ]]; then
-        echo -e "${ANSI_BLUE}  Sector content before:"
+        echo -e "${ANSI_NAVY}  Sector content before:"
         cat $TEMP_SECTOR_FILE | hexdump -Cv | head -n 4 | sed -e 's/^/  /'
         echo -ne "${ANSI_RESET}"
     fi
@@ -198,7 +199,7 @@ if [[ "$NEW_LABEL" != "" ]]; then
     echo -n "           " | dd of=$TEMP_SECTOR_FILE count=11 conv=notrunc 2> /dev/null
     echo -n "$NEW_LABEL" | dd of=$TEMP_SECTOR_FILE count=${#NEW_LABEL} conv=notrunc 2> /dev/null
     if [[ $VERBOSE -ge 5 ]]; then
-        echo -e "${ANSI_BLUE}  Sector content after:"
+        echo -e "${ANSI_NAVY}  Sector content after:"
         cat $TEMP_SECTOR_FILE | hexdump -Cv | head -n 4 | sed -e 's/^/  /'
         echo -ne "${ANSI_RESET}"
     fi
@@ -258,7 +259,7 @@ for DEVICE in $TMPUSB_DEVICES; do
         echo
 
         if [[ $VERBOSE -ge 5 ]]; then
-            echo -e "${ANSI_BLUE}  Sector content:"
+            echo -e "${ANSI_NAVY}  Sector content:"
             dd if=/dev/$DEVICE bs=512 skip=3 count=1 2> /dev/null | hexdump -Cv | head -n 4 | sed -e 's/^/  /'
             echo -ne "${ANSI_RESET}"
         fi

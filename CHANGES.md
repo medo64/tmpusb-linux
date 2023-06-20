@@ -1,3 +1,9 @@
+### 1.0.0 [2023-01-24] ###
+
+* Added missing fdisk dependency
+* Refactoring colors and verbosity
+
+
 ### 0.1.0 [2022-01-24] ###
 
 * Refactoring colors and verbosity

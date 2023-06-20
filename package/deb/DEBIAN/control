@@ -11,4 +11,4 @@ Description:    Mounting and unmounting TmpUsb drive
  self-erase after approximately 3 seconds of being unplugged.
 Section:        admin
 Priority:       optional
-Depends:        bash (>= 5.0), debconf, bsdmainutils
+Depends:        bash (>= 5.0), debconf, bsdmainutils, fdisk

@@ -87,6 +87,11 @@ if [[ "$2" != "" ]]; then
     exit 255
 fi
 
+if [[ "$USER" == "root" ]]; then
+    echo "${ANSI_RED}Must be root!${ANSI_RESET}" >&2
+    exit 1
+fi
+
 NEW_LABEL=$1
 if [[ ${#NEW_LABEL} -gt 11 ]]; then
     echo "${ANSI_RED}Label length cannot exceed 11 characters!${ANSI_RESET}" >&2

@@ -1,3 +1,8 @@
+### 1.0.1 [2025-10-11] ###
+
+* Supressing errors if mandb is not installed (or other errors)
+
+
 ### 1.0.0 [2023-01-24] ###
 
 * Added missing fdisk dependency

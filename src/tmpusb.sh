@@ -87,7 +87,7 @@ if [[ "$2" != "" ]]; then
     exit 255
 fi
 
-if [[ "$USER" == "root" ]]; then
+if [[ "$USER" != "root" ]]; then
     echo "${ANSI_RED}Must be root!${ANSI_RESET}" >&2
     exit 1
 fi
